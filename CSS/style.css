@@ -1,0 +1,227 @@
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  body {
+      background-color: #ffffff;
+      color: #666;
+      font-size: 20px;
+  }
+  
+  h1 {
+      margin: -35px 0 5px 0;
+      padding: 10px;
+      color: #4d4d4d;
+      font-size: 30px;
+  }
+  
+  h1 span {
+      color: orange;
+      font-size: 40px;
+  }
+  
+  main {
+      padding: 10px;
+      clear: both;
+  }
+  
+  #wrapper {
+      max-width: 500px;
+      min-width: 320px;
+      margin: 0 auto;
+      background-color: #4d4d4d;
+      color: white;
+  }
+  
+  .msg a:hover {
+     color: orange; 
+  }
+  
+  .hint {
+      font-size: 12px;
+      margin: 10px 0;
+      text-align: right;
+      width: 100%;
+  }
+  
+  nav {
+      background: white;
+      top: 0px;
+  }
+  
+  #sticky {
+      position: sticky;
+      top: 0;
+      background: #4d4d4d;
+  }
+  
+  .navBtn {
+      width: 50%;
+      border: none;
+      float: left;
+  }
+  
+  .navBtn a, .catBtn {
+      display: block;
+      width: 100%;
+      background-color: #4d4d4d;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      line-height: 50px;
+  }
+  
+  .navBtn a:hover, .catBtn:hover {
+      background-color: orange;
+  }
+  
+  #logoutNav {
+      text-align: right;
+  }
+  
+  #logoutBtn {
+      top: 0;
+      display: inline-block;
+      text-align: right;
+      padding: 6px 10px 6px 6px;
+      border-radius: 5px;
+      font-size: 10px;
+      border: 1px solid #4d4d4d;
+      background: #09add0;
+      color:#fff; 
+      cursor: pointer;
+  }
+  
+  #logout {
+      margin-bottom: 10px;
+  }
+  
+  /*** Data Output ***/
+  #dataOutput {
+      display: flex;
+      flex-wrap: wrap;
+  }
+  
+  .logUnit, .logValue {
+      width: 25%;
+  }
+  
+  .logValue {
+      text-align: right;
+      padding: 0 5px 0 0;
+  }
+  
+  .logLabel  {
+      width: 50%;
+  }
+  
+  .logDate {
+      width: 100%;
+      text-align: right;
+      font-size: 14px;
+      margin-top: 15px;
+  }
+  
+  .delete {
+      width: 50%;
+      text-align: right;
+      font-size: 14px;
+      margin-top: 15px;
+  }
+  
+  /*** Formulare ***/
+  form {
+      margin: 10px auto;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  
+  form label {
+      display: block;
+      width: 35%;
+      padding: 5px 15px 10px 0;
+      font-size: 20px;
+      text-align: right;
+      margin: 5px 0;
+  }
+  
+  form label.errorMsg {
+      display: block;
+      width: 100%;
+      padding: 5px 15px 10px 0;
+      font-size: 20px;
+      text-align: right;
+      color:#FF31A5;
+      margin: 5px 0;
+  }
+  
+  input[type='number'], input[type="date"], input[type="password"]
+  , input[type="text"] {
+      text-align:center;
+      font-size: 18px;
+      width: 65%;
+      margin: 5px 0;
+  }
+  
+  form span {
+      width: 20%
+  }
+  
+  input[type="submit"] {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      background-color: #09add0;
+      color: white;
+      text-decoration: none;
+      border: none;
+      text-align: center;
+      line-height: 30px;
+  }
+  
+  .subLabel {
+      display: inline-block;
+      padding: 10px;
+      margin: 5px;
+      cursor: pointer;
+      border: 1px solid #4d4d4d;
+      background-color: #4d4d4d;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+  }
+  
+  input[type="radio"] {
+      display: none;
+      cursor: pointer;
+  }
+  
+  input[type="radio"]:checked+label {
+      background-color: #09add0;
+  }
+  
+  .navBtn a.active {
+      background-color: #09add0;
+  }
+  
+  label.subLabel:hover, #logoutBtn:hover {
+      background-color: orange;
+  }
+  
+  #subNav {
+      text-align: center;
+  }
+  
+  .hr_subNav {
+      border-top: 2px solid orange;
+      margin-top: 5px;
+      padding-top: 5px;
+      clear: both;
+  }
+  
+  .bottom_border {
+      clear: both;
+      border-bottom: 2px solid orange;
+  }

@@ -1,0 +1,134 @@
+User Controller:
+
+validateUserLogin
+    Logged den User ein.
+    Benötigt Email und Passwort.
+    (HTTP GET: mail, pwd)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=user&do=validateUserLogin&email=tim2@test.de&pwd=abcde
+
+    Es kommt ein Objekt zurück. Wenn success: true ist hat alles geklappt. Wenn nicht wird in der Message stehen was das Problem ist. Diese Message könnte theoretisch dem User ausgegeben werden.
+    Der Status Code gibt zusätzlich aus ob die Anfrage durchlief oder nicht. Außerdem wird noch die UserID des nun eingeloggten Users ausgegeben.
+    z.B: {"success":"true","message":"Logged in successfully.","status":"200","userID":"fa26500c-77d4-4e94-babf-3be63f0fe985"}
+
+logout
+    Logged den User aus
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=user&do=logout
+
+    Es kommt ein Objekt zurück. Wenn success: true ist hat alles geklappt. Status sollte 200 sein.
+    z.B: {"success":"true","message":"User was logged out successfully.","status":"200"}
+
+signup
+    Erstellt einen neuen Nutzer, wenn die Email noch nicht benutzt wurde
+    Benötigt Email, Username, Passwort
+    (HTTP GET: email, name, pwd)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=user&do=signup&email=tim@syqlo.com&pwd=12345&name=tim
+
+    Es kommt ein Objekt zurück. Wenn success: true ist hat alles geklappt.
+    Wenn nicht ist eventuell die Email bereits genutzt.
+    z.B: {"success":"false","message":"Email already exists.","status":"403"}
+    Wenn das Nutzer erstellen ging wird etwas derartiges kommen:
+    z.B: {"success":"true","message":"Signed Up successfully.","status":"200"}
+
+
+Data Controller:
+
+getCSRFToken
+    Erstell einen CSRF Token, speichert ihn ab und übergiebt ihn an den Client.
+    So kann später die insertDataForCategory oder die setUserPWD Funktion genutzt werden.
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=getCSRFToken
+
+    Es kommt ein Objekt zurück. Wenn success: true ist hat alles geklappt. Der nun aktuelle CSRF Token wird mit "token" übergeben.
+    Dieser muss im Frontend gespreichert werden um ihn wieder mitzugeben wenn er benötight wird.
+    In Message steht nur was passiert ist und in status sollte 200 stehen.
+    z.B: {"success":"true","message":"Token was genarated.","token":"603e3470d511d","status":"200"}
+
+getCategorys
+    Übergiebt alle Kategorien des eingeloggten Users an den den Client.
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=getCategorys
+
+    Es kommt ein Array von Objekten zurück. Jedes Objekt hat eine id, userid, description, unit und created Feld.
+    Über die ID kann die Kategorie immer eindeutig geholt werden. Die UserID entspricht immer dem eingeloggten Users.
+    Die description ist die Beschreubung der Kategorie.
+    Die Unit ist die Einheit der Kategorie.
+    Das created Feld gibt das Datum an dem die Kategorie angelegt wurde an.
+    z.B: [{"id":"12e3e817-134f-4ef4-b3ac-487c10da976d","userId":"fa26500c-77d4-4e94-babf-3be63f0fe985","description":"Die neue L\u00e4nge 3","unit":"km 3","created":"2021-03-02 13:52:11"}]
+
+getOneCategory
+    Giebt nur die eine Kategorie zurück. Benötigt nur die ID.
+    (HTTP GET: id)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=getOneCategory&id=6ab28278-91e4-11e7-b93f-2c4d544f8fe0
+
+    Giebt ein Array von Objekten zurück. Das Array wird immer nur ein Element haben.
+    Die Struktur des Objekts entspricht der Objekte der obigen Funktion.
+    z.B: [{"id":"6ab28278-91e4-11e7-b93f-2c4d544f8fe0","userId":"0bb28278-d28a-11e7-b93f-2c4d544f8fe0","description":"Gewicht","unit":"kg","created":"2020-04-1011:13:20"}]
+
+insertDataForCategory
+    Erstellt einen neuen Datensatz in der data Relation.
+    Benötigt den Wert, das Datum (in Unix Zeit), die Kategorie ID, und den aktuellen CSRF-Token
+    (HTTP GET: value, date, categoryid, csrftoken)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=insertDataForCategory&categoryid=fe9b4daa-5151-430f-8190-2be80aa2a461&value=7777&date=1614092327&csrftoken=6035184107365
+
+    Es kommt ein Objekt zurück. Wenn es ein Fehler mit dem CSRF Token gibt kann z.B sowas zurück kommen:
+    {"success":"false","message":"CSRF Token never generated.","status":"403"}
+    Hierbei ist success: false und message gibt an was falsch lief. Status gibt ebenfalls an was falsch lief.
+    Wenn der CSRF Token stimmt und die Daten erfolgreich in die DB geschrieben wurde wird sowas zurück kommen:
+    z.B: {"success":"true","message":"Dataset was added to the Database successfully.","status":"200"}
+    Wenn success: true ist hat alles geklappt.
+
+deleteDataSet
+    Löscht ein bestimmtes Tupel in der Data Relation.
+    Benötigt nur die ID.
+    (HTTP GET: id)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=deleteDataSet&id=5f86c63e-91e4-4c1c-982e-c3957daf0aca
+
+    Gibt immer eine Success Objekt zurück, da das Löschen eines nicht enthaltenen Datensatzes keinen Fehler darstellt.
+    Success wird immer true sein und message wird angeben was passiert ist. Der Status Code entspricht dem success Wert.
+    z.B: {"success":"true","message":"Dataset was deleted from the Database successfully.","status":"200"}
+
+addNewCategory
+    Erstellt eine neue Kategorie. Die User ID muss nicht übergeben werden, es wird einfach die des eingeloggten Users genutzt.
+    Es muss lediglich die Beschreubung und die Einheit angegeben werden.
+    (HTTP GET: description, unit)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=addNewCategory&description=Die neue Länge 3&unit=km 3
+
+    Gibt ein Objekt zurück. Wenn success: true ist hat alles geklappt. Die Message gibt an was passiert ist. Status entspricht dem HTTP Status code.
+    z.B: {"success":"true","message":"New Category was added to the Database successfully.","status":"200"}
+
+getFilteredData
+    Dies ist die Kernfunktion, die Daten aus der data Relation gefilterd ausgibt.
+    Es kann nach Zeit und nach Kategorie gefiltert werden.
+    Der Zeit Parameter kann entweder 1W, 1M oder 3M sein.
+    Das entspricht 1ne Woche, 1 Monat oder 3 Monate.
+
+    Die Kategorie ID kann entweder "all" sein oder eine CategoryID.
+    Wenn der Parameter "all" ist, werden Datas des Users von allen Kategorien ausgegeben.
+    Wenn statt "all" eine CategoryID übergeben wird werden nur Datas dieser Kategorie ausgegeben.
+    (HTTP GET: time, categoryid)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=getFilteredData&time=3M&categoryid=fe9b4daa-5151-430f-8190-2be80aa2a461
+
+    Es kommt ein Array von Objekten zurück. Jedes Objekt hat eine id, categoryId, logValue, logDate, userId, description, unit und created Feld.
+    Die id und categoryId sind immer identisch, eine davon kann also ignoriert werden. Relevant für die Ausgabe sind eigentlich nur die Restlichen Felder.
+    logValue ist der vom User eingegbene Wert. Also immer eine Zahl.
+    logDate ist das Datum das mit dem logValue assoziiert ist.
+    description und unit geben die Beschreibung und die Einheit des logValue Wertes an.
+
+    z.B: [{"id":"c09ee346-a600-49a0-b979-4c5de81442e0","categoryId":"c09ee346-a600-49a0-b979-4c5de81442e0","logValue":"87654321.00","logDate":"2021-03-02 15:44:52","userId":"fa26500c-77d4-4e94-babf-3be63f0fe985","description":"Laenge 3","unit":"cm 3","created":"2021-03-02 15:43:47"}]
+
+setUserPWD
+    Setzt das Passwort des eingeloggten Users. Ist mit CSRF Token geschützt.
+    Benötigt das neue Passwort und den aktuellen CSRF Token.
+    (HTTP GET: pwd, csrftoken)
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=setUserPWD&pwd=1234&csrftoken=6035184107365
+
+    Es kommt ein Objekt zurück. Wenn success: true ist hat alles geklappt. In Message steht was passiert ist. Der Status entspricht dem theoretischen HTTP Status Code.
+    {"success":"true","message":"Changed Password successfully.","status":"200"}
+
+getUserName
+    Gibt den Usernamen des eingeloggten Users aus.
+    z.B: http://localhost:8888/log-my-day/logMyDay/restAPI.php?controller=data&do=getUserName
+
+    Es kommt ein verschachteltes Objekt raus.
+    Wenn success: true ist hat alles geklappt. Message beschreibt was passiert ist. Status entspricht dem theoretischen HTTP Status Code.
+    In name ist ein weiteres Objekt hinterlegt. In diesem Objekt ist nur ein Wert und zwar username.
+    In username steht der Username des gerade eingeloggten Users.
+    {"success":"true","message":"Got Username successfully.","status":"200","name":{"username":"tim123"}}
